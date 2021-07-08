@@ -88,6 +88,37 @@ function getPartners() {
 
 
 /**
+ * Gets list player round counts
+ */
+function getPlayerCounts() {
+  eval(UrlFetchApp.fetch('https://cdn.jsdelivr.net/npm/lodash@4.17.4/lodash.min.js').getContentText());
+
+  // loop through pairings data
+  let players = [];
+  let s = SpreadsheetApp.getActive().getSheetByName('schedule').getDataRange().getValues();
+  for (let i=1; i < s.length; i++) {
+    let round_pairings = _.slice(s[i], 1, s[i].length);
+    for (let j=0; j < round_pairings.length; j++) {
+      let teams = round_pairings[j].split('\n');
+      for (let k=0; k < teams.length; k++){
+        let team = teams[k].split(' and ');     
+        players.push(team[0]);
+        players.push(team[1]);
+      }
+    }
+  }
+
+  let counts = players.reduce((a,c) => (a[c] = a[c] || 0, a[c]++, a ) ,{});
+
+  // add players to pairings
+  let rows = [['Player', 'Games']];
+  rows = rows.concat(Object.entries(counts));
+  console.log(rows);
+  return rows;
+}
+
+
+/**
  * Shows square (n_players x n_players) matrix of player opponent counts
  */
 function opponentReport() {
@@ -102,6 +133,15 @@ function opponentReport() {
 function partnerReport() {
   let partners = getPartners();
   writePairings(partners, 'partner_report');
+}
+
+
+/**
+ * Shows player game counts
+ */
+function playerReport() {
+  let players = getPlayerCounts();
+  writePairings(players, 'player_report');
 }
 
 
@@ -124,15 +164,6 @@ function schedulePlayers() {
   }
 
   return Array.from(sp);
-}
-
-
-/**
- * Bulk write to sheets - much faster than appending rows
- */
-function writeMultipleRows(sheet, data) {
-  let lastRow = sheet.getLastRow();
-  sheet.getRange(lastRow + 1, 1, data.length, data[0].length).setValues(data);
 }
 
 
@@ -160,4 +191,5 @@ function writePairings(data, pairingsType='partner_report') {
   range.setHorizontalAlignment("center");
   SpreadsheetApp.getActive().setActiveSheet(sheet);
 }
+
 

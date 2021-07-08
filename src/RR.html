@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+      label {
+        font-weight: bold;
+        padding-bottom: 10px;
+      }
+      
+    </style>
+    <script>
+      // Prevent forms from submitting.
+      function preventFormSubmit() {
+        var forms = document.querySelectorAll('form');
+        for (var i = 0; i < forms.length; i++) {
+          forms[i].addEventListener('submit', function(event) {
+            event.preventDefault();
+          });
+        }
+      }
+      
+      window.addEventListener('load', preventFormSubmit);
+
+      function sendForm() {
+        var form = document.forms.myForm;
+        var kvpairs = {};
+        for ( var i = 0; i < form.elements.length; i++ ) {
+          var e = form.elements[i];
+          if (e.name !== '') {
+            kvpairs[e.name] = e.value;
+          }
+        }
+        document.getElementById("output").innerHTML = "Generating schedule ...";
+        google.script.run.withSuccessHandler(ready).withFailureHandler(onFailure).
+        processRRForm(kvpairs);
+      }
+
+      function ready() {
+        google.script.host.close();
+      }
+
+      function onFailure(error) {
+          var msg = "ERROR: " + error.message;
+          document.getElementById('output').innerHTML = msg;
+      }
+
+    </script>
+  </head>
+  <body>
+    <form id="myForm">
+      <label for="n_games">Number of Games:</label><br>
+      <input type="text" id="n_games" name="n_games" value="8" maxlength="4" size="5"><br><br>
+      <button onclick="javascript:sendForm();">Create Schedule</button>
+    </form>
+
+    <div id="output"></div>
+  </body>
+</html>

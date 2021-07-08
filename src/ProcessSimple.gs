@@ -69,8 +69,8 @@
  * Creates simple schedule
  */
 function getSimpleSchedule(post_data) {
-  let sched = [['Round#', 'Court 1', 'Court 2', 'Court 3', 'Court 4', 'Court 5', 'Court 6', 'Court 7']];
-  let players = post_data['players'];
+  let sched = [['R', 'Court 1', 'Court 2', 'Court 3', 'Court 4', 'Court 5', 'Court 6', 'Court 7']];
+  let players = _.shuffle(post_data['players']);
   let idx = sched32;
   for (let i = 0; i < idx.length; i++) {
     let round = [i + 1];
@@ -78,6 +78,7 @@ function getSimpleSchedule(post_data) {
       let matchup = idx[i][j];
       t1 = players[matchup[0]] + ' and ' + players[matchup[1]];
       t2 = players[matchup[2]] + ' and ' + players[matchup[3]];
+      console.log(t1 + '\n' + t2);
       round.push(t1 + '\n' + t2);
     }
     sched.push(round)
@@ -104,7 +105,8 @@ function processSimpleForm(formData) {
   }
   
   let sched = getSimpleSchedule(formData);
-  //writeSchedule(sched);
+  writeSchedule(sched);
+  SpreadsheetApp.getActive().setActiveSheet(sheet);
   closeSidebar();
 }
 

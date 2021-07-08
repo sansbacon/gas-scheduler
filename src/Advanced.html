@@ -80,7 +80,7 @@
       }
       document.getElementById("output").innerHTML = "Generating schedule ...";
       google.script.run.withSuccessHandler(ready).withFailureHandler(onFailure).
-      processForm(kvpairs);
+      processAdvancedForm(kvpairs);
     }
 
     function ready() {
@@ -97,7 +97,7 @@
   </head>
   <body>
       <form id="myForm">
-      <label for="n_games">Number of Players:</label><br>
+      <label for="n_players">Number of Players:</label><br>
       <input type="text" id="n_players" name="n_players" value="28" maxlength="4" size="5"><br><br>
       <label for="n_games">Number of Games:</label><br>
       <input type="text" id="n_games" name="n_games" value="7" maxlength="4" size="5"><br><br>
