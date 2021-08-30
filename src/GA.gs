@@ -1,7 +1,10 @@
-const GENERATIONS = 30
-const RANDOM_MUTATIONS = 2
-const MAX_DESCENDANTS_TO_EXPLORE = 100
+const GENERATIONS = 30;
+const RANDOM_MUTATIONS = 2;
+const MAX_DESCENDANTS_TO_EXPLORE = 100;
 
+function tGA() {
+  console.log(JSON.stringify(geneticSolver(7, 4, 12)))
+}
 
 function forEachPair(array, callback) {
   for (let i = 0; i < array.length - 1; i++) {

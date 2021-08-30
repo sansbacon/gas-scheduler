@@ -1,21 +1,4 @@
 /**
- * Gets array of players marked active from players sheet.
- * Uses cache so will not reflect very recent changes. 
- */
-function activePlayers() {
-  let keyname = 'activePlayers'
-  let players = cache.get(keyname);
-  if (!players) {
-    let p = SpreadsheetApp.getActive().getSheetByName('players').getDataRange().getValues();
-    let players = _.filter(p, (e) => e[2] === 'Yes');
-    cache.put(keyname, _.map(players, (player) => { return player[0]}));
-  }
-  
-  return cache.get(keyname);
-}
-
-
-/**
  * Generates schedule from AdvancedSchedule menu option / sidebar 
  */
 function getAdvancedSchedule(post_data) {
@@ -60,4 +43,3 @@ function processAdvancedForm(formData) {
   writeSchedule(sched);
   closeSidebar();
 }
-

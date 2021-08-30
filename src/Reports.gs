@@ -4,7 +4,6 @@
  * Gets square (n_players x n_players) matrix of player opponent counts
  */
 function getOpponents() {
-  eval(UrlFetchApp.fetch('https://cdn.jsdelivr.net/npm/lodash@4.17.4/lodash.min.js').getContentText());
 
   // get players listed on schedule
   let players = schedulePlayers();
@@ -146,28 +145,6 @@ function playerReport() {
 
 
 /**
- * Gets array of unique player names listed on schedule sheet
- */
-function schedulePlayers() {
-  let s = SpreadsheetApp.getActive().getSheetByName('schedule').getDataRange().getValues();
-  let sp = new Set();
-  for (let i=1; i < s.length; i++) {
-    let round_pairings = _.slice(s[i], 1, s[i].length);
-    for (let j=0; j < round_pairings.length; j++) {
-      let teams = round_pairings[j].split('\n');
-      for (let k=0; k < teams.length; k++){
-        let team = teams[k].split(' and ');     
-        sp.add(team[0]);
-        sp.add(team[1]);
-      }
-    }
-  }
-
-  return Array.from(sp);
-}
-
-
-/**
  * Shows square (n_players x n_players) matrix of player partner counts
  */
 function writePairings(data, pairingsType='partner_report') {
@@ -191,5 +168,4 @@ function writePairings(data, pairingsType='partner_report') {
   range.setHorizontalAlignment("center");
   SpreadsheetApp.getActive().setActiveSheet(sheet);
 }
-
 
